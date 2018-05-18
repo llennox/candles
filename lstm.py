@@ -84,16 +84,3 @@ predicted_price = min_max_scaler.inverse_transform(predicted_price)
 print(predicted_price[0:5], 'after')
 print(predicted_price.shape)
 quit()
-
-
-
-plt.figure(figsize=(25, 25), dpi=80, facecolor = 'w', edgecolor = 'k')
-
-plt.plot(test_set[:, 0], color='red', label='Real BTC Price')
-plt.plot(predicted_price[:, 0], color = 'blue', label = 'Predicted BTC Price')
-
-plt.title('BTC Price Prediction', fontsize = 40)
-plt.xlabel('Time', fontsize=40)
-plt.ylabel('BTC Price(USD)', fontsize = 40)
-plt.legend(loc = 'best')
-plt.show()
