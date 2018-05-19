@@ -19,7 +19,6 @@ print(df.columns)
 
 
 prediction_minutes = 60
-
 df_train = df[:len(df)-prediction_minutes]
 df_test= df[len(df)-prediction_minutes:]
 print(df_test[0:5])
@@ -30,8 +29,8 @@ training_set = min_max_scaler.fit_transform(training_set)
 #print(training_set[0])
 #print(training_set)
 
-x_train = training_set[0:len(training_set)-1]
-y_train = training_set[1:len(training_set)]
+x_train = training_set[0:len(training_set)-60]
+y_train = training_set[60:len(training_set)]
 #print(x_train.shape)
 #print(len(y_train), 'here')
 
@@ -45,8 +44,8 @@ num_units = 5
 activation_function = 'sigmoid'
 optimizer = 'adam'
 loss_function = 'mean_squared_error'
-batch_size = 32
-num_epochs = 1
+batch_size = 60
+num_epochs = 20
 
 # Initialize the RNN
 regressor = Sequential()
@@ -66,21 +65,29 @@ regressor.compile(optimizer = optimizer, loss = loss_function)
 #print(len(y_train), 'and again')
 #print(len(x_train))
 
+
 regressor.fit(x_train, y_train, batch_size = batch_size, epochs = num_epochs)
+
+regressor.save('BTCRLC.hd5')
+
+quit()
 
 test_set = df_test.values
 print(test_set.shape, 'test_set')
-print(test_set[0:5], 'hi')
 test_set = min_max_scaler.fit_transform(test_set)
 
 inputs = np.reshape(test_set, (len(test_set), 5, 1))
 #print(inputs.shape, 'input')
 predicted_price = regressor.predict(inputs)
-#print(predicted_price.shape, 'predicted price shape')
+print(predicted_price.shape, 'predicted price shape')
 #print(predicted_price[0:5], 'before')
 predicted_price = min_max_scaler.inverse_transform(predicted_price)
 
-
-print(predicted_price[0:5], 'after')
+for item in df_test.values.tolist():
+    print(item[2], 'real values')
+for item in predicted_price.tolist():
+    print(item[2], 'prediction')
+for item in test_set.tolist():
+    print(item[2], 'input')
 print(predicted_price.shape)
 quit()
